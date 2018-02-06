@@ -3,10 +3,67 @@
 <head>
   <title>Our simple HTTP server</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
-  
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
+    const handleResponse = (xhr, parseJSON) => {
+      const content = document.querySelector('#content');
 
+      switch (xhr.status) {
+        case 200:
+          content.innerHTML = `<b>Continue</b>`;
+          break;
+        case 201:
+          content.innerHTML = `<b>Created</b>`;
+          break;
+        case 404:
+          content.innerHTML = `<b>Not Found</b>`;
+          break;
+        default:
+          break;
+      }
+
+      if (parseJSON) {
+        content.innerHTML +=  `<p>${JSON.parse(xhr.response)}</p>`;
+      }
+    };
+
+    const sendRequest = (url, type, e) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open(type, url);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.setRequestHeader('Accept', 'application/json');
+
+      xhr.onload = () => {
+        switch(type) {
+          case 'GET':
+            handleResponse(xhr, true);
+            break;
+          case 'HEAD':
+            handleResponse(xhr, false);
+            break;
+          case 'POST':
+            const formData = `name=${nameField.value}&age=${ageField.value}`;
+            xhr.send(formData);
+            e.preventDefault();
+            return false;
+        }
+      };
+    };
+
+    const init = () => {
+      const userForm = document.querySelector('#userForm');
+      const nameForm = document.querySelector('#nameForm');
+      const getUser = userForm.querySelector('input');
+      const postUser = nameForm.querySelector('input');
+
+      getUser.addEventListener('click', e => {
+        e.preventDefault();
+        const request = userForm.querySelector('#methodSelect').value;
+        const url = userForm.querySelector('#urlField').value;
+        sendRequest(url, request, e);
+      });
+    }
   </script>
 </head>
 <body>
