@@ -8,7 +8,7 @@ const respondJSON = (request, response, status, object) => {
 
 const getUsers = (request, response) => {
   const responseJSON = {
-    message: users,
+    message: {users},
   };
 
   return respondJSON(request, response, 200, responseJSON);
@@ -18,15 +18,6 @@ const notReal = (request, response) => {
   const responseJSON = {
     message: 'Error: not real',
     id: 'notReal',
-  };
-
-  return respondJSON(request, response, 404, responseJSON);
-};
-
-const notFound = (request, response) => {
-  const responseJSON = {
-    message: 'Error: not found',
-    id: 'notFound',
   };
 
   return respondJSON(request, response, 404, responseJSON);

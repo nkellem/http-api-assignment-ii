@@ -24,7 +24,9 @@
       }
 
       if (parseJSON) {
-        content.innerHTML +=  `<p>${JSON.parse(xhr.response)}</p>`;
+        const response = JSON.parse(xhr.response);
+        console.dir(response.message);
+        content.innerHTML +=  `<p>${response.message}</p>`;
       }
     };
 
@@ -35,20 +37,23 @@
       xhr.setRequestHeader('Accept', 'application/json');
 
       xhr.onload = () => {
-        switch(type) {
-          case 'GET':
-            handleResponse(xhr, true);
-            break;
-          case 'HEAD':
-            handleResponse(xhr, false);
-            break;
-          case 'POST':
-            const formData = `name=${nameField.value}&age=${ageField.value}`;
-            xhr.send(formData);
-            e.preventDefault();
-            return false;
+        if (type === 'get') {
+          handleResponse(xhr, true);
+        } else if (type === 'head') {
+          handleResponse(xhr, false)
+        } else {
+          console.log('Cant handle request');
         }
       };
+
+      if (type === 'post') {
+        const formData = `name=${nameField.value}&age=${ageField.value}`;
+        xhr.send(formData);
+        e.preventDefault();
+        return false;
+      } else {
+        xhr.send();
+      }
     };
 
     const init = () => {
@@ -58,12 +63,14 @@
       const postUser = nameForm.querySelector('input');
 
       getUser.addEventListener('click', e => {
-        e.preventDefault();
         const request = userForm.querySelector('#methodSelect').value;
         const url = userForm.querySelector('#urlField').value;
         sendRequest(url, request, e);
+        e.preventDefault();
       });
     }
+
+    window.onload = init;
   </script>
 </head>
 <body>

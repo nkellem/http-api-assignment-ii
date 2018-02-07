@@ -12,7 +12,6 @@ const urlStruct = {
   '/style.css': cssHandler.getStyle,
   '/getUsers': jsonHandler.getUsers,
   '/notReal': jsonHandler.notReal,
-  notFound: jsonHandler.notFound,
 };
 
 const onRequest = (request, response) => {
@@ -21,7 +20,7 @@ const onRequest = (request, response) => {
   if (urlStruct[parsedUrl.pathname]) {
     urlStruct[parsedUrl.pathname](request, response);
   } else {
-    urlStruct.notFound(request, response);
+    urlStruct['/notReal'](request, response);
   }
 };
 
