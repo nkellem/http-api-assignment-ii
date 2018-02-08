@@ -12,6 +12,7 @@ const urlStruct = {
   '/style.css': cssHandler.getStyle,
   '/getUsers': jsonHandler.getUsers,
   '/notReal': jsonHandler.notReal,
+  '/addUser': jsonHandler.addUser,
 };
 
 const onRequest = (request, response) => {
